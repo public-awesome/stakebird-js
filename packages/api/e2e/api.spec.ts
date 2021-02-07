@@ -1,11 +1,11 @@
-import { RegenApi } from '../src/api';
+import { StargazeApi } from '../src/api';
 import { QueryClientImpl } from '../src/generated/cosmos/bank/v1beta1/query';
 
-let api: RegenApi;
+let api: StargazeApi;
 
 describe('RegenApi with tendermint connection', () => {
 	beforeAll(async () => {
-		api = await RegenApi.connect({
+		api = await StargazeApi.connect({
 			connection: {
 				type: 'tendermint',
 				url: 'http://devnet.regen.network:26657',
