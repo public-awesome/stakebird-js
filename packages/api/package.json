@@ -18,6 +18,10 @@
 		"test": "jest"
 	},
 	"devDependencies": {
+		"@cosmjs/launchpad": "^0.23.2",
+		"@cosmjs/proto-signing": "^0.24.0-alpha.25",
+		"@cosmjs/stargate": "^0.24.0-alpha.25",
+		"@cosmjs/utils": "^0.23.2",
 		"ts-proto": "^1.41.1"
 	}
 }

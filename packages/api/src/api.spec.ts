@@ -1,5 +1,8 @@
 import { StargazeApi } from './api';
 import { QueryClientImpl } from './generated/cosmos/bank/v1beta1/query';
+import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { SigningStargateClient } from '@cosmjs/stargate';
+import { MsgPost } from './generated/stargaze/curating/v1beta1/tx';
 
 let api: StargazeApi;
 
@@ -17,7 +20,7 @@ describe('StargazeApi', () => {
 		it('should fetch balances using tendermint client', async () => {
 			const impl = new QueryClientImpl(api.connection.queryConnection);
 			const res = await impl.AllBalances({
-				address: 'stars1wsrvdmgfs0gugen4t4ak7hnudhy9mgnpcys5gn', // Shane's account.
+				address: 'stars1wsrvdmgfs0gugen4t4ak7hnudhy9mgnpcys5gn', // Shane's account
 			});
 
 			// TODO So ideally, the two lines would be combined into one:
@@ -31,7 +34,36 @@ describe('StargazeApi', () => {
 
 	describe('Txs', () => {
 		it('should post a tx on chain', async () => {
-            
-        });
+			const mnemonic =
+				'surround miss nominee dream gap cross assault thank captain prosper drop duty group candy wealth weather scale put';
+			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic);
+			const [accnt] = await wallet.getAccounts();
+			const chainUrl = 'localhost:26657';
+			const client = await SigningStargateClient.connectWithSigner(
+				chainUrl,
+				wallet
+			);
+
+			const msg = MsgPost.fromPartial({
+				vendorId: 1,
+				postId: '123',
+				creator: accnt.address,
+				rewardAccount: accnt.address,
+				body: 'This is a tweet',
+			});
+
+			const msgAny = {
+				typeUrl: '/stargaze.curating.v1beta1.MsgPost',
+				value: msg,
+			};
+
+            const fee = {
+                amount: coins(10000000, 'ustarx'),
+                gas: '180000' // 180k
+            };
+            const memo = 'Use your power wisely';
+            const result = await client.signAndBroadcast(address, [msgAny], fee, memo);
+        
+		});
 	});
 });
