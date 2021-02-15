@@ -1,6 +1,6 @@
 import { StargazeApi } from './api';
 import { QueryClientImpl } from './generated/cosmos/bank/v1beta1/query';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { DirectSecp256k1HdWallet, Registry } from '@cosmjs/proto-signing';
 import {
 	SigningStargateClient,
 	assertIsBroadcastTxSuccess,
@@ -9,13 +9,23 @@ import { MsgPost } from './generated/stargaze/curating/v1beta1/tx';
 import { coins } from '@cosmjs/launchpad';
 
 let api: StargazeApi;
+const chainUrl = 'localhost:26657';
+
+/***
+
+NOTE: The first time running these test will fail without funding the test user. 
+
+Fund with:
+./bin/starsd tx bank send validator [address] 100000000ustarx --keyring-backend test --chain-id localnet-1
+
+*/
 
 describe('StargazeApi', () => {
 	beforeAll(async () => {
 		api = await StargazeApi.connect({
 			connection: {
 				type: 'tendermint',
-				url: 'localhost:26657',
+				url: chainUrl,
 			},
 		});
 	});
@@ -41,22 +51,27 @@ describe('StargazeApi', () => {
 				'stars'
 			);
 			const [{ address }] = await wallet.getAccounts();
-			const chainUrl = 'localhost:26657';
+
+			const msgPostTypeUrl = '/stargaze.curating.v1beta1.MsgPost';
+			const registry = new Registry();
+			registry.register(msgPostTypeUrl, MsgPost);
+
 			const client = await SigningStargateClient.connectWithSigner(
 				chainUrl,
-				wallet
+				wallet,
+				{ registry: registry }
 			);
 
 			const msg = MsgPost.fromPartial({
 				vendorId: 1,
-				postId: '123',
+				postId: '1',
 				creator: address,
 				rewardAccount: address,
 				body: 'This is a tweet',
 			});
 
 			const msgAny = {
-				typeUrl: '/stargaze.curating.v1beta1.MsgPost',
+				typeUrl: msgPostTypeUrl,
 				value: msg,
 			};
 

@@ -12,7 +12,7 @@
 	"scripts": {
 		"build": "rimraf lib && tsc",
 		"gen": "rimraf src/generated && mkdir src/generated && ./scripts/protocgen.sh",
-		"test": "jest"
+		"test": "jest --testTimeout 10000"
 	},
 	"devDependencies": {
 		"@cosmjs/launchpad": "^0.23.2",
