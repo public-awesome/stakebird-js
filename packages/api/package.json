@@ -1,6 +1,6 @@
 {
 	"name": "@stargazefi/api",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"author": "Public Awesome",
 	"description": "A client library for the Stargaze blockchain",
 	"license": "Apache-2.0",
