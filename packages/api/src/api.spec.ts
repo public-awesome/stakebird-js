@@ -40,7 +40,8 @@ describe('StargazeApi', () => {
 			const chainUrl = 'localhost:26657';
 			const client = await SigningStargateClient.connectWithSigner(
 				chainUrl,
-				wallet
+				wallet,
+				{ prefix: 'stars' }
 			);
 
 			const msg = MsgPost.fromPartial({
