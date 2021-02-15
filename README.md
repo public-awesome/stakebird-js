@@ -37,7 +37,7 @@ Stargaze-JS consists of many smaller npm packages within the [@stargazefi namesp
 
 | Package                                   | Description                                         | Latest                                                                                                            |
 | ----------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| [@stargazefi/api](packages/api)           | A client library interacting with the Regen Ledger. | [![npm version](https://img.shields.io/npm/v/@stargazefi/api.svg)](https://www.npmjs.com/package/@stargazefi/api) |
+| [@stargazefi/api](packages/api)           | A client library interacting with Stargaze.         | [![npm version](https://img.shields.io/npm/v/@stargazefi/api.svg)](https://www.npmjs.com/package/@stargazefi/api) |
 | [@stargazefi/demo-app](packages/demo-app) | A demo React app using `@stargazefi/api`.           | Not published on npm.                                                                                             |
 
 ## Build the packages from source

@@ -3,12 +3,12 @@ import { QueryClientImpl } from '../src/generated/cosmos/bank/v1beta1/query';
 
 let api: StargazeApi;
 
-describe('RegenApi with tendermint connection', () => {
+describe('StargazeApi with tendermint connection', () => {
 	beforeAll(async () => {
 		api = await StargazeApi.connect({
 			connection: {
 				type: 'tendermint',
-				url: 'http://devnet.regen.network:26657',
+				url: 'https://rpc.devnet.stargaze.fi',
 			},
 		});
 	});
@@ -16,7 +16,7 @@ describe('RegenApi with tendermint connection', () => {
 	it('should fetch balances using tendermint client', async () => {
 		const bankClient = new QueryClientImpl(api.connection.queryConnection);
 		const res = await bankClient.AllBalances({
-			address: 'regen:1j9h8dpu7ah2hl9rg7ycu0e64kh90rrlpk9kagz', // Amaury's account.
+			address: 'stars1nnz4naa7f0z6pwga3xkvcn3ju0unclm7ecd6a4', // Shane's account.
 		});
 
 		expect(res.balances.length).toBeGreaterThanOrEqual(1);
