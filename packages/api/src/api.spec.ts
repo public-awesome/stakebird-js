@@ -27,11 +27,6 @@ describe('StargazeApi', () => {
 				address: 'stars1wsrvdmgfs0gugen4t4ak7hnudhy9mgnpcys5gn', // Shane's account
 			});
 
-			// TODO So ideally, the two lines would be combined into one:
-			// ```
-			// api.query.cosmos.bank.v1beta1.AllBalances({});`
-			// ```
-
 			expect(res.balances).toHaveLength(4);
 		});
 	});
