@@ -1,8 +1,12 @@
 import { StargazeApi } from './api';
 import { QueryClientImpl } from './generated/cosmos/bank/v1beta1/query';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { SigningStargateClient } from '@cosmjs/stargate';
+import {
+	SigningStargateClient,
+	assertIsBroadcastTxSuccess,
+} from '@cosmjs/stargate';
 import { MsgPost } from './generated/stargaze/curating/v1beta1/tx';
+import { coins } from '@cosmjs/launchpad';
 
 let api: StargazeApi;
 
@@ -37,7 +41,7 @@ describe('StargazeApi', () => {
 			const mnemonic =
 				'surround miss nominee dream gap cross assault thank captain prosper drop duty group candy wealth weather scale put';
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic);
-			const [accnt] = await wallet.getAccounts();
+			const [{ address }] = await wallet.getAccounts();
 			const chainUrl = 'localhost:26657';
 			const client = await SigningStargateClient.connectWithSigner(
 				chainUrl,
@@ -47,8 +51,8 @@ describe('StargazeApi', () => {
 			const msg = MsgPost.fromPartial({
 				vendorId: 1,
 				postId: '123',
-				creator: accnt.address,
-				rewardAccount: accnt.address,
+				creator: address,
+				rewardAccount: address,
 				body: 'This is a tweet',
 			});
 
@@ -57,13 +61,19 @@ describe('StargazeApi', () => {
 				value: msg,
 			};
 
-            const fee = {
-                amount: coins(10000000, 'ustarx'),
-                gas: '180000' // 180k
-            };
-            const memo = 'Use your power wisely';
-            const result = await client.signAndBroadcast(address, [msgAny], fee, memo);
-        
+			const fee = {
+				amount: coins(10000000, 'ustarx'),
+				gas: '180000', // 180k
+			};
+			const memo = 'Use your power wisely';
+			const result = await client.signAndBroadcast(
+				address,
+				[msgAny],
+				fee,
+				memo
+			);
+
+			assertIsBroadcastTxSuccess(result);
 		});
 	});
 });
