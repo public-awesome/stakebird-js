@@ -15,7 +15,7 @@ export interface StargazeApiOptions {
 }
 
 /**
- * The main entry point for interacting with the Regen Ledger. The class needs
+ * The main entry point for interacting with Stargaze. The class needs
  * a client connection
  */
 export class StargazeApi {
