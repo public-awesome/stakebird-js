@@ -16,7 +16,7 @@ describe('StargazeApi', () => {
 	it('should fetch balances using tendermint client', async () => {
 		const impl = new QueryClientImpl(api.connection.queryConnection);
 		const res = await impl.AllBalances({
-			address: 'stb1nnz4naa7f0z6pwga3xkvcn3ju0unclm700rqpe', // Shane's account.
+			address: 'stars1wsrvdmgfs0gugen4t4ak7hnudhy9mgnpcys5gn', // Shane's account.
 		});
 
 		// TODO So ideally, the two lines would be combined into one:
@@ -24,6 +24,6 @@ describe('StargazeApi', () => {
 		// api.query.cosmos.bank.v1beta1.AllBalances({});`
 		// ```
 
-		expect(res.balances).toHaveLength(2);
+		expect(res.balances).toHaveLength(4);
 	});
 });
