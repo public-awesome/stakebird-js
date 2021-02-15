@@ -35,13 +35,16 @@ describe('StargazeApi', () => {
 		it('should post a tx on chain', async () => {
 			const mnemonic =
 				'surround miss nominee dream gap cross assault thank captain prosper drop duty group candy wealth weather scale put';
-			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic);
+			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+				mnemonic,
+				undefined,
+				'stars'
+			);
 			const [{ address }] = await wallet.getAccounts();
 			const chainUrl = 'localhost:26657';
 			const client = await SigningStargateClient.connectWithSigner(
 				chainUrl,
-				wallet,
-				{ prefix: 'stars' }
+				wallet
 			);
 
 			const msg = MsgPost.fromPartial({
