@@ -2,253 +2,288 @@
 import { Params, Metadata } from '../../../cosmos/bank/v1beta1/bank';
 import { Coin } from '../../../cosmos/base/v1beta1/coin';
 import { Writer, Reader } from 'protobufjs/minimal';
+import * as Long from 'long';
 
+export const protobufPackage = 'cosmos.bank.v1beta1';
 
-/**
- *  GenesisState defines the bank module's genesis state.
- */
+/** GenesisState defines the bank module's genesis state. */
 export interface GenesisState {
-  /**
-   *  params defines all the paramaters of the module.
-   */
-  params?: Params;
-  /**
-   *  balances is an array containing the balances of all the accounts.
-   */
-  balances: Balance[];
-  /**
-   *  supply represents the total supply.
-   */
-  supply: Coin[];
-  /**
-   *  denom_metadata defines the metadata of the differents coins.
-   */
-  denomMetadata: Metadata[];
+	/** params defines all the paramaters of the module. */
+	params?: Params;
+	/** balances is an array containing the balances of all the accounts. */
+	balances: Balance[];
+	/** supply represents the total supply. */
+	supply: Coin[];
+	/** denom_metadata defines the metadata of the differents coins. */
+	denomMetadata: Metadata[];
 }
 
 /**
- *  Balance defines an account address and balance pair used in the bank module's
- *  genesis state.
+ * Balance defines an account address and balance pair used in the bank module's
+ * genesis state.
  */
 export interface Balance {
-  /**
-   *  address is the address of the balance holder.
-   */
-  address: string;
-  /**
-   *  coins defines the different coins this balance holds.
-   */
-  coins: Coin[];
+	/** address is the address of the balance holder. */
+	address: string;
+	/** coins defines the different coins this balance holds. */
+	coins: Coin[];
 }
 
-const baseGenesisState: object = {
-};
-
-const baseBalance: object = {
-  address: "",
-};
-
-export const protobufPackage = 'cosmos.bank.v1beta1'
+const baseGenesisState: object = {};
 
 export const GenesisState = {
-  encode(message: GenesisState, writer: Writer = Writer.create()): Writer {
-    if (message.params !== undefined && message.params !== undefined) {
-      Params.encode(message.params, writer.uint32(10).fork()).ldelim();
-    }
-    for (const v of message.balances) {
-      Balance.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    for (const v of message.supply) {
-      Coin.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    for (const v of message.denomMetadata) {
-      Metadata.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: Uint8Array | Reader, length?: number): GenesisState {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseGenesisState } as GenesisState;
-    message.balances = [];
-    message.supply = [];
-    message.denomMetadata = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.params = Params.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.balances.push(Balance.decode(reader, reader.uint32()));
-          break;
-        case 3:
-          message.supply.push(Coin.decode(reader, reader.uint32()));
-          break;
-        case 4:
-          message.denomMetadata.push(Metadata.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): GenesisState {
-    const message = { ...baseGenesisState } as GenesisState;
-    message.balances = [];
-    message.supply = [];
-    message.denomMetadata = [];
-    if (object.params !== undefined && object.params !== null) {
-      message.params = Params.fromJSON(object.params);
-    } else {
-      message.params = undefined;
-    }
-    if (object.balances !== undefined && object.balances !== null) {
-      for (const e of object.balances) {
-        message.balances.push(Balance.fromJSON(e));
-      }
-    }
-    if (object.supply !== undefined && object.supply !== null) {
-      for (const e of object.supply) {
-        message.supply.push(Coin.fromJSON(e));
-      }
-    }
-    if (object.denomMetadata !== undefined && object.denomMetadata !== null) {
-      for (const e of object.denomMetadata) {
-        message.denomMetadata.push(Metadata.fromJSON(e));
-      }
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<GenesisState>): GenesisState {
-    const message = { ...baseGenesisState } as GenesisState;
-    message.balances = [];
-    message.supply = [];
-    message.denomMetadata = [];
-    if (object.params !== undefined && object.params !== null) {
-      message.params = Params.fromPartial(object.params);
-    } else {
-      message.params = undefined;
-    }
-    if (object.balances !== undefined && object.balances !== null) {
-      for (const e of object.balances) {
-        message.balances.push(Balance.fromPartial(e));
-      }
-    }
-    if (object.supply !== undefined && object.supply !== null) {
-      for (const e of object.supply) {
-        message.supply.push(Coin.fromPartial(e));
-      }
-    }
-    if (object.denomMetadata !== undefined && object.denomMetadata !== null) {
-      for (const e of object.denomMetadata) {
-        message.denomMetadata.push(Metadata.fromPartial(e));
-      }
-    }
-    return message;
-  },
-  toJSON(message: GenesisState): unknown {
-    const obj: any = {};
-    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
-    if (message.balances) {
-      obj.balances = message.balances.map(e => e ? Balance.toJSON(e) : undefined);
-    } else {
-      obj.balances = [];
-    }
-    if (message.supply) {
-      obj.supply = message.supply.map(e => e ? Coin.toJSON(e) : undefined);
-    } else {
-      obj.supply = [];
-    }
-    if (message.denomMetadata) {
-      obj.denomMetadata = message.denomMetadata.map(e => e ? Metadata.toJSON(e) : undefined);
-    } else {
-      obj.denomMetadata = [];
-    }
-    return obj;
-  },
+	encode(message: GenesisState, writer: Writer = Writer.create()): Writer {
+		if (message.params !== undefined) {
+			Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+		}
+		for (const v of message.balances) {
+			Balance.encode(v!, writer.uint32(18).fork()).ldelim();
+		}
+		for (const v of message.supply) {
+			Coin.encode(v!, writer.uint32(26).fork()).ldelim();
+		}
+		for (const v of message.denomMetadata) {
+			Metadata.encode(v!, writer.uint32(34).fork()).ldelim();
+		}
+		return writer;
+	},
+
+	decode(input: Reader | Uint8Array, length?: number): GenesisState {
+		const reader = input instanceof Uint8Array ? new Reader(input) : input;
+		let end = length === undefined ? reader.len : reader.pos + length;
+		const message = globalThis.Object.create(
+			baseGenesisState
+		) as GenesisState;
+		message.balances = [];
+		message.supply = [];
+		message.denomMetadata = [];
+		while (reader.pos < end) {
+			const tag = reader.uint32();
+			switch (tag >>> 3) {
+				case 1:
+					message.params = Params.decode(reader, reader.uint32());
+					break;
+				case 2:
+					message.balances.push(
+						Balance.decode(reader, reader.uint32())
+					);
+					break;
+				case 3:
+					message.supply.push(Coin.decode(reader, reader.uint32()));
+					break;
+				case 4:
+					message.denomMetadata.push(
+						Metadata.decode(reader, reader.uint32())
+					);
+					break;
+				default:
+					reader.skipType(tag & 7);
+					break;
+			}
+		}
+		return message;
+	},
+
+	fromJSON(object: any): GenesisState {
+		const message = globalThis.Object.create(
+			baseGenesisState
+		) as GenesisState;
+		message.balances = [];
+		message.supply = [];
+		message.denomMetadata = [];
+		if (object.params !== undefined && object.params !== null) {
+			message.params = Params.fromJSON(object.params);
+		} else {
+			message.params = undefined;
+		}
+		if (object.balances !== undefined && object.balances !== null) {
+			for (const e of object.balances) {
+				message.balances.push(Balance.fromJSON(e));
+			}
+		}
+		if (object.supply !== undefined && object.supply !== null) {
+			for (const e of object.supply) {
+				message.supply.push(Coin.fromJSON(e));
+			}
+		}
+		if (
+			object.denomMetadata !== undefined &&
+			object.denomMetadata !== null
+		) {
+			for (const e of object.denomMetadata) {
+				message.denomMetadata.push(Metadata.fromJSON(e));
+			}
+		}
+		return message;
+	},
+
+	fromPartial(object: DeepPartial<GenesisState>): GenesisState {
+		const message = { ...baseGenesisState } as GenesisState;
+		message.balances = [];
+		message.supply = [];
+		message.denomMetadata = [];
+		if (object.params !== undefined && object.params !== null) {
+			message.params = Params.fromPartial(object.params);
+		} else {
+			message.params = undefined;
+		}
+		if (object.balances !== undefined && object.balances !== null) {
+			for (const e of object.balances) {
+				message.balances.push(Balance.fromPartial(e));
+			}
+		}
+		if (object.supply !== undefined && object.supply !== null) {
+			for (const e of object.supply) {
+				message.supply.push(Coin.fromPartial(e));
+			}
+		}
+		if (
+			object.denomMetadata !== undefined &&
+			object.denomMetadata !== null
+		) {
+			for (const e of object.denomMetadata) {
+				message.denomMetadata.push(Metadata.fromPartial(e));
+			}
+		}
+		return message;
+	},
+
+	toJSON(message: GenesisState): unknown {
+		const obj: any = {};
+		message.params !== undefined &&
+			(obj.params = message.params
+				? Params.toJSON(message.params)
+				: undefined);
+		if (message.balances) {
+			obj.balances = message.balances.map((e) =>
+				e ? Balance.toJSON(e) : undefined
+			);
+		} else {
+			obj.balances = [];
+		}
+		if (message.supply) {
+			obj.supply = message.supply.map((e) =>
+				e ? Coin.toJSON(e) : undefined
+			);
+		} else {
+			obj.supply = [];
+		}
+		if (message.denomMetadata) {
+			obj.denomMetadata = message.denomMetadata.map((e) =>
+				e ? Metadata.toJSON(e) : undefined
+			);
+		} else {
+			obj.denomMetadata = [];
+		}
+		return obj;
+	},
 };
+
+const baseBalance: object = { address: '' };
 
 export const Balance = {
-  encode(message: Balance, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.address);
-    for (const v of message.coins) {
-      Coin.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: Uint8Array | Reader, length?: number): Balance {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseBalance } as Balance;
-    message.coins = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.address = reader.string();
-          break;
-        case 2:
-          message.coins.push(Coin.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): Balance {
-    const message = { ...baseBalance } as Balance;
-    message.coins = [];
-    if (object.address !== undefined && object.address !== null) {
-      message.address = String(object.address);
-    } else {
-      message.address = "";
-    }
-    if (object.coins !== undefined && object.coins !== null) {
-      for (const e of object.coins) {
-        message.coins.push(Coin.fromJSON(e));
-      }
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<Balance>): Balance {
-    const message = { ...baseBalance } as Balance;
-    message.coins = [];
-    if (object.address !== undefined && object.address !== null) {
-      message.address = object.address;
-    } else {
-      message.address = "";
-    }
-    if (object.coins !== undefined && object.coins !== null) {
-      for (const e of object.coins) {
-        message.coins.push(Coin.fromPartial(e));
-      }
-    }
-    return message;
-  },
-  toJSON(message: Balance): unknown {
-    const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
-    if (message.coins) {
-      obj.coins = message.coins.map(e => e ? Coin.toJSON(e) : undefined);
-    } else {
-      obj.coins = [];
-    }
-    return obj;
-  },
+	encode(message: Balance, writer: Writer = Writer.create()): Writer {
+		if (message.address !== '') {
+			writer.uint32(10).string(message.address);
+		}
+		for (const v of message.coins) {
+			Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+		}
+		return writer;
+	},
+
+	decode(input: Reader | Uint8Array, length?: number): Balance {
+		const reader = input instanceof Uint8Array ? new Reader(input) : input;
+		let end = length === undefined ? reader.len : reader.pos + length;
+		const message = globalThis.Object.create(baseBalance) as Balance;
+		message.coins = [];
+		while (reader.pos < end) {
+			const tag = reader.uint32();
+			switch (tag >>> 3) {
+				case 1:
+					message.address = reader.string();
+					break;
+				case 2:
+					message.coins.push(Coin.decode(reader, reader.uint32()));
+					break;
+				default:
+					reader.skipType(tag & 7);
+					break;
+			}
+		}
+		return message;
+	},
+
+	fromJSON(object: any): Balance {
+		const message = globalThis.Object.create(baseBalance) as Balance;
+		message.coins = [];
+		if (object.address !== undefined && object.address !== null) {
+			message.address = String(object.address);
+		} else {
+			message.address = '';
+		}
+		if (object.coins !== undefined && object.coins !== null) {
+			for (const e of object.coins) {
+				message.coins.push(Coin.fromJSON(e));
+			}
+		}
+		return message;
+	},
+
+	fromPartial(object: DeepPartial<Balance>): Balance {
+		const message = { ...baseBalance } as Balance;
+		message.coins = [];
+		if (object.address !== undefined && object.address !== null) {
+			message.address = object.address;
+		} else {
+			message.address = '';
+		}
+		if (object.coins !== undefined && object.coins !== null) {
+			for (const e of object.coins) {
+				message.coins.push(Coin.fromPartial(e));
+			}
+		}
+		return message;
+	},
+
+	toJSON(message: Balance): unknown {
+		const obj: any = {};
+		message.address !== undefined && (obj.address = message.address);
+		if (message.coins) {
+			obj.coins = message.coins.map((e) =>
+				e ? Coin.toJSON(e) : undefined
+			);
+		} else {
+			obj.coins = [];
+		}
+		return obj;
+	},
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+	if (typeof globalThis !== 'undefined') return globalThis;
+	if (typeof self !== 'undefined') return self;
+	if (typeof window !== 'undefined') return window;
+	if (typeof global !== 'undefined') return global;
+	throw 'Unable to locate global object';
+})();
+
+type Builtin =
+	| Date
+	| Function
+	| Uint8Array
+	| string
+	| number
+	| undefined
+	| Long;
 export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
+	? T
+	: T extends Array<infer U>
+	? Array<DeepPartial<U>>
+	: T extends ReadonlyArray<infer U>
+	? ReadonlyArray<DeepPartial<U>>
+	: T extends {}
+	? { [K in keyof T]?: DeepPartial<T[K]> }
+	: Partial<T>;

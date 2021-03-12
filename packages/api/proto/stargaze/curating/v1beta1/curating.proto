@@ -32,6 +32,7 @@ message Post {
     (gogoproto.jsontag) = "body_hash",
     (gogoproto.nullable) = false
   ];
+  string body = 6 [ (gogoproto.moretags) = "yaml:\"body\"" ];
   google.protobuf.Timestamp curating_end_time = 7 [
     (gogoproto.stdtime) = true,
     (gogoproto.nullable) = false,
@@ -52,6 +53,24 @@ message Post {
     (gogoproto.customname) = "TotalAmount",
     (gogoproto.moretags) = "yaml:\"total_amount\"",
     (gogoproto.jsontag) = "total_amount"
+  ];
+  string chain_id = 11 [
+    (gogoproto.customname) = "ChainID",
+    (gogoproto.moretags) = "yaml:\"chain_id\"",
+    (gogoproto.jsontag) = "chain_id",
+    (gogoproto.nullable) = true
+  ];
+  string owner = 12 [ (gogoproto.moretags) = "yaml:\"owner\"" ];
+  string contract_address = 13
+      [ (gogoproto.moretags) = "yaml:\"contract_address\"" ];
+  string metadata = 14 [ (gogoproto.moretags) = "yaml:\"metadata\"" ];
+  bool locked = 15 [ (gogoproto.moretags) = "yaml:\"locked\"" ];
+  string parent_id = 16 [
+    (gogoproto.customname) = "ParentID",
+    (gogoproto.customtype) = "PostID",
+    (gogoproto.moretags) = "yaml:\"parent_id\"",
+    (gogoproto.jsontag) = "parent_id",
+    (gogoproto.nullable) = true
   ];
 }
 
@@ -132,6 +151,11 @@ message Params {
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable) = false,
     (gogoproto.moretags) = "yaml:\"reward_pool_allocation\""
+  ];
+
+  uint32 max_post_body_length = 6 [
+    (gogoproto.moretags) = "yaml:\"max_post_body_length\"",
+    (gogoproto.jsontag) = "max_post_body_length"
   ];
 
   string reward_pool_curation_max_alloc = 8 [
