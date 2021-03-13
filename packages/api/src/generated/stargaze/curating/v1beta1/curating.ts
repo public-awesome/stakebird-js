@@ -18,12 +18,6 @@ export interface Post {
 	totalVotes: Long;
 	totalVoters: Long;
 	totalAmount?: Coin;
-	chainId: string;
-	owner: string;
-	contractAddress: string;
-	metadata: string;
-	locked: boolean;
-	parentId: string;
 }
 
 export interface Upvote {
@@ -71,12 +65,6 @@ const basePost: object = {
 	body: '',
 	totalVotes: Long.UZERO,
 	totalVoters: Long.UZERO,
-	chainId: '',
-	owner: '',
-	contractAddress: '',
-	metadata: '',
-	locked: false,
-	parentId: '',
 };
 
 export const Post = {
@@ -113,24 +101,6 @@ export const Post = {
 		}
 		if (message.totalAmount !== undefined) {
 			Coin.encode(message.totalAmount, writer.uint32(82).fork()).ldelim();
-		}
-		if (message.chainId !== '') {
-			writer.uint32(90).string(message.chainId);
-		}
-		if (message.owner !== '') {
-			writer.uint32(98).string(message.owner);
-		}
-		if (message.contractAddress !== '') {
-			writer.uint32(106).string(message.contractAddress);
-		}
-		if (message.metadata !== '') {
-			writer.uint32(114).string(message.metadata);
-		}
-		if (message.locked === true) {
-			writer.uint32(120).bool(message.locked);
-		}
-		if (message.parentId !== '') {
-			writer.uint32(130).string(message.parentId);
 		}
 		return writer;
 	},
@@ -173,24 +143,6 @@ export const Post = {
 					break;
 				case 10:
 					message.totalAmount = Coin.decode(reader, reader.uint32());
-					break;
-				case 11:
-					message.chainId = reader.string();
-					break;
-				case 12:
-					message.owner = reader.string();
-					break;
-				case 13:
-					message.contractAddress = reader.string();
-					break;
-				case 14:
-					message.metadata = reader.string();
-					break;
-				case 15:
-					message.locked = reader.bool();
-					break;
-				case 16:
-					message.parentId = reader.string();
 					break;
 				default:
 					reader.skipType(tag & 7);
@@ -258,39 +210,6 @@ export const Post = {
 		} else {
 			message.totalAmount = undefined;
 		}
-		if (object.chainId !== undefined && object.chainId !== null) {
-			message.chainId = String(object.chainId);
-		} else {
-			message.chainId = '';
-		}
-		if (object.owner !== undefined && object.owner !== null) {
-			message.owner = String(object.owner);
-		} else {
-			message.owner = '';
-		}
-		if (
-			object.contractAddress !== undefined &&
-			object.contractAddress !== null
-		) {
-			message.contractAddress = String(object.contractAddress);
-		} else {
-			message.contractAddress = '';
-		}
-		if (object.metadata !== undefined && object.metadata !== null) {
-			message.metadata = String(object.metadata);
-		} else {
-			message.metadata = '';
-		}
-		if (object.locked !== undefined && object.locked !== null) {
-			message.locked = Boolean(object.locked);
-		} else {
-			message.locked = false;
-		}
-		if (object.parentId !== undefined && object.parentId !== null) {
-			message.parentId = String(object.parentId);
-		} else {
-			message.parentId = '';
-		}
 		return message;
 	},
 
@@ -352,39 +271,6 @@ export const Post = {
 		} else {
 			message.totalAmount = undefined;
 		}
-		if (object.chainId !== undefined && object.chainId !== null) {
-			message.chainId = object.chainId;
-		} else {
-			message.chainId = '';
-		}
-		if (object.owner !== undefined && object.owner !== null) {
-			message.owner = object.owner;
-		} else {
-			message.owner = '';
-		}
-		if (
-			object.contractAddress !== undefined &&
-			object.contractAddress !== null
-		) {
-			message.contractAddress = object.contractAddress;
-		} else {
-			message.contractAddress = '';
-		}
-		if (object.metadata !== undefined && object.metadata !== null) {
-			message.metadata = object.metadata;
-		} else {
-			message.metadata = '';
-		}
-		if (object.locked !== undefined && object.locked !== null) {
-			message.locked = object.locked;
-		} else {
-			message.locked = false;
-		}
-		if (object.parentId !== undefined && object.parentId !== null) {
-			message.parentId = object.parentId;
-		} else {
-			message.parentId = '';
-		}
 		return message;
 	},
 
@@ -410,13 +296,6 @@ export const Post = {
 			(obj.totalAmount = message.totalAmount
 				? Coin.toJSON(message.totalAmount)
 				: undefined);
-		message.chainId !== undefined && (obj.chainId = message.chainId);
-		message.owner !== undefined && (obj.owner = message.owner);
-		message.contractAddress !== undefined &&
-			(obj.contractAddress = message.contractAddress);
-		message.metadata !== undefined && (obj.metadata = message.metadata);
-		message.locked !== undefined && (obj.locked = message.locked);
-		message.parentId !== undefined && (obj.parentId = message.parentId);
 		return obj;
 	},
 };
