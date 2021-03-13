@@ -16,6 +16,10 @@ export interface MsgPost {
 	creator: string;
 	rewardAccount: string;
 	body: string;
+	chainId: string;
+	contractAddress: string;
+	metadata: string;
+	parentId: string;
 }
 
 export interface MsgUpvote {
@@ -133,6 +137,10 @@ const baseMsgPost: object = {
 	creator: '',
 	rewardAccount: '',
 	body: '',
+	chainId: '',
+	contractAddress: '',
+	metadata: '',
+	parentId: '',
 };
 
 export const MsgPost = {
@@ -151,6 +159,18 @@ export const MsgPost = {
 		}
 		if (message.body !== '') {
 			writer.uint32(42).string(message.body);
+		}
+		if (message.chainId !== '') {
+			writer.uint32(50).string(message.chainId);
+		}
+		if (message.contractAddress !== '') {
+			writer.uint32(58).string(message.contractAddress);
+		}
+		if (message.metadata !== '') {
+			writer.uint32(66).string(message.metadata);
+		}
+		if (message.parentId !== '') {
+			writer.uint32(74).string(message.parentId);
 		}
 		return writer;
 	},
@@ -176,6 +196,18 @@ export const MsgPost = {
 					break;
 				case 5:
 					message.body = reader.string();
+					break;
+				case 6:
+					message.chainId = reader.string();
+					break;
+				case 7:
+					message.contractAddress = reader.string();
+					break;
+				case 8:
+					message.metadata = reader.string();
+					break;
+				case 9:
+					message.parentId = reader.string();
 					break;
 				default:
 					reader.skipType(tag & 7);
@@ -215,6 +247,29 @@ export const MsgPost = {
 		} else {
 			message.body = '';
 		}
+		if (object.chainId !== undefined && object.chainId !== null) {
+			message.chainId = String(object.chainId);
+		} else {
+			message.chainId = '';
+		}
+		if (
+			object.contractAddress !== undefined &&
+			object.contractAddress !== null
+		) {
+			message.contractAddress = String(object.contractAddress);
+		} else {
+			message.contractAddress = '';
+		}
+		if (object.metadata !== undefined && object.metadata !== null) {
+			message.metadata = String(object.metadata);
+		} else {
+			message.metadata = '';
+		}
+		if (object.parentId !== undefined && object.parentId !== null) {
+			message.parentId = String(object.parentId);
+		} else {
+			message.parentId = '';
+		}
 		return message;
 	},
 
@@ -248,6 +303,29 @@ export const MsgPost = {
 		} else {
 			message.body = '';
 		}
+		if (object.chainId !== undefined && object.chainId !== null) {
+			message.chainId = object.chainId;
+		} else {
+			message.chainId = '';
+		}
+		if (
+			object.contractAddress !== undefined &&
+			object.contractAddress !== null
+		) {
+			message.contractAddress = object.contractAddress;
+		} else {
+			message.contractAddress = '';
+		}
+		if (object.metadata !== undefined && object.metadata !== null) {
+			message.metadata = object.metadata;
+		} else {
+			message.metadata = '';
+		}
+		if (object.parentId !== undefined && object.parentId !== null) {
+			message.parentId = object.parentId;
+		} else {
+			message.parentId = '';
+		}
 		return message;
 	},
 
@@ -259,6 +337,11 @@ export const MsgPost = {
 		message.rewardAccount !== undefined &&
 			(obj.rewardAccount = message.rewardAccount);
 		message.body !== undefined && (obj.body = message.body);
+		message.chainId !== undefined && (obj.chainId = message.chainId);
+		message.contractAddress !== undefined &&
+			(obj.contractAddress = message.contractAddress);
+		message.metadata !== undefined && (obj.metadata = message.metadata);
+		message.parentId !== undefined && (obj.parentId = message.parentId);
 		return obj;
 	},
 };
