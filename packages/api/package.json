@@ -1,6 +1,6 @@
 {
 	"name": "@stargazefi/api",
-	"version": "0.3.4",
+	"version": "0.3.5",
 	"author": "Public Awesome",
 	"description": "A client library for the Stargaze blockchain",
 	"license": "Apache-2.0",
@@ -15,10 +15,10 @@
 		"test": "jest --testTimeout 10000"
 	},
 	"devDependencies": {
-		"@cosmjs/launchpad": "^0.23.2",
-		"@cosmjs/proto-signing": "^0.24.0-alpha.25",
-		"@cosmjs/stargate": "^0.24.0-alpha.25",
-		"@cosmjs/utils": "^0.23.2",
+		"@cosmjs/launchpad": "^0.24.1",
+		"@cosmjs/proto-signing": "^0.24.1",
+		"@cosmjs/stargate": "^0.24.1",
+		"@cosmjs/utils": "^0.24.1",
 		"ts-proto": "^1.41.1"
 	}
 }
