@@ -33,6 +33,8 @@ export interface Upvote {
 	rewardAccount: string;
 	voteAmount?: Coin;
 	curatedTime?: Date;
+	voteNum: number;
+	updatedTime?: Date;
 }
 
 /**
@@ -426,6 +428,7 @@ const baseUpvote: object = {
 	postId: '',
 	curator: '',
 	rewardAccount: '',
+	voteNum: 0,
 };
 
 export const Upvote = {
@@ -449,6 +452,15 @@ export const Upvote = {
 			Timestamp.encode(
 				toTimestamp(message.curatedTime),
 				writer.uint32(50).fork()
+			).ldelim();
+		}
+		if (message.voteNum !== 0) {
+			writer.uint32(56).int32(message.voteNum);
+		}
+		if (message.updatedTime !== undefined) {
+			Timestamp.encode(
+				toTimestamp(message.updatedTime),
+				writer.uint32(66).fork()
 			).ldelim();
 		}
 		return writer;
@@ -478,6 +490,14 @@ export const Upvote = {
 					break;
 				case 6:
 					message.curatedTime = fromTimestamp(
+						Timestamp.decode(reader, reader.uint32())
+					);
+					break;
+				case 7:
+					message.voteNum = reader.int32();
+					break;
+				case 8:
+					message.updatedTime = fromTimestamp(
 						Timestamp.decode(reader, reader.uint32())
 					);
 					break;
@@ -524,6 +544,16 @@ export const Upvote = {
 		} else {
 			message.curatedTime = undefined;
 		}
+		if (object.voteNum !== undefined && object.voteNum !== null) {
+			message.voteNum = Number(object.voteNum);
+		} else {
+			message.voteNum = 0;
+		}
+		if (object.updatedTime !== undefined && object.updatedTime !== null) {
+			message.updatedTime = fromJsonTimestamp(object.updatedTime);
+		} else {
+			message.updatedTime = undefined;
+		}
 		return message;
 	},
 
@@ -562,6 +592,16 @@ export const Upvote = {
 		} else {
 			message.curatedTime = undefined;
 		}
+		if (object.voteNum !== undefined && object.voteNum !== null) {
+			message.voteNum = object.voteNum;
+		} else {
+			message.voteNum = 0;
+		}
+		if (object.updatedTime !== undefined && object.updatedTime !== null) {
+			message.updatedTime = object.updatedTime;
+		} else {
+			message.updatedTime = undefined;
+		}
 		return message;
 	},
 
@@ -580,6 +620,12 @@ export const Upvote = {
 			(obj.curatedTime =
 				message.curatedTime !== undefined
 					? message.curatedTime.toISOString()
+					: null);
+		message.voteNum !== undefined && (obj.voteNum = message.voteNum);
+		message.updatedTime !== undefined &&
+			(obj.updatedTime =
+				message.updatedTime !== undefined
+					? message.updatedTime.toISOString()
 					: null);
 		return obj;
 	},
