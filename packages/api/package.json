@@ -15,10 +15,10 @@
 		"test": "jest --testTimeout 10000"
 	},
 	"devDependencies": {
-		"@cosmjs/launchpad": "^0.24.1",
-		"@cosmjs/proto-signing": "^0.24.1",
-		"@cosmjs/stargate": "^0.24.1",
-		"@cosmjs/utils": "^0.24.1",
+		"@cosmjs/launchpad": "^0.25.3",
+		"@cosmjs/proto-signing": "^0.25.3",
+		"@cosmjs/stargate": "^0.25.3",
+		"@cosmjs/utils": "^0.25.3",
 		"ts-proto": "^1.41.1"
 	}
 }
