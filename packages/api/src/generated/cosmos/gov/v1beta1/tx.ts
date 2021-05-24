@@ -3,6 +3,7 @@ import { Any } from '../../../google/protobuf/any';
 import * as Long from 'long';
 import {
 	VoteOption,
+	WeightedVoteOption,
 	voteOptionFromJSON,
 	voteOptionToJSON,
 } from '../../../cosmos/gov/v1beta1/gov';
@@ -33,8 +34,18 @@ export interface MsgVote {
 	option: VoteOption;
 }
 
+/** MsgVote defines a message to cast a vote. */
+export interface MsgVoteWeighted {
+	proposalId: Long;
+	voter: string;
+	options: WeightedVoteOption[];
+}
+
 /** MsgVoteResponse defines the Msg/Vote response type. */
 export interface MsgVoteResponse {}
+
+/** MsgVoteWeightedResponse defines the Msg/VoteWeighted response type. */
+export interface MsgVoteWeightedResponse {}
 
 /** MsgDeposit defines a message to submit a deposit to an existing proposal. */
 export interface MsgDeposit {
@@ -323,6 +334,111 @@ export const MsgVote = {
 	},
 };
 
+const baseMsgVoteWeighted: object = { proposalId: Long.UZERO, voter: '' };
+
+export const MsgVoteWeighted = {
+	encode(message: MsgVoteWeighted, writer: Writer = Writer.create()): Writer {
+		if (!message.proposalId.isZero()) {
+			writer.uint32(8).uint64(message.proposalId);
+		}
+		if (message.voter !== '') {
+			writer.uint32(18).string(message.voter);
+		}
+		for (const v of message.options) {
+			WeightedVoteOption.encode(v!, writer.uint32(26).fork()).ldelim();
+		}
+		return writer;
+	},
+
+	decode(input: Reader | Uint8Array, length?: number): MsgVoteWeighted {
+		const reader = input instanceof Uint8Array ? new Reader(input) : input;
+		let end = length === undefined ? reader.len : reader.pos + length;
+		const message = globalThis.Object.create(
+			baseMsgVoteWeighted
+		) as MsgVoteWeighted;
+		message.options = [];
+		while (reader.pos < end) {
+			const tag = reader.uint32();
+			switch (tag >>> 3) {
+				case 1:
+					message.proposalId = reader.uint64() as Long;
+					break;
+				case 2:
+					message.voter = reader.string();
+					break;
+				case 3:
+					message.options.push(
+						WeightedVoteOption.decode(reader, reader.uint32())
+					);
+					break;
+				default:
+					reader.skipType(tag & 7);
+					break;
+			}
+		}
+		return message;
+	},
+
+	fromJSON(object: any): MsgVoteWeighted {
+		const message = globalThis.Object.create(
+			baseMsgVoteWeighted
+		) as MsgVoteWeighted;
+		message.options = [];
+		if (object.proposalId !== undefined && object.proposalId !== null) {
+			message.proposalId = Long.fromString(object.proposalId);
+		} else {
+			message.proposalId = Long.UZERO;
+		}
+		if (object.voter !== undefined && object.voter !== null) {
+			message.voter = String(object.voter);
+		} else {
+			message.voter = '';
+		}
+		if (object.options !== undefined && object.options !== null) {
+			for (const e of object.options) {
+				message.options.push(WeightedVoteOption.fromJSON(e));
+			}
+		}
+		return message;
+	},
+
+	fromPartial(object: DeepPartial<MsgVoteWeighted>): MsgVoteWeighted {
+		const message = { ...baseMsgVoteWeighted } as MsgVoteWeighted;
+		message.options = [];
+		if (object.proposalId !== undefined && object.proposalId !== null) {
+			message.proposalId = object.proposalId as Long;
+		} else {
+			message.proposalId = Long.UZERO;
+		}
+		if (object.voter !== undefined && object.voter !== null) {
+			message.voter = object.voter;
+		} else {
+			message.voter = '';
+		}
+		if (object.options !== undefined && object.options !== null) {
+			for (const e of object.options) {
+				message.options.push(WeightedVoteOption.fromPartial(e));
+			}
+		}
+		return message;
+	},
+
+	toJSON(message: MsgVoteWeighted): unknown {
+		const obj: any = {};
+		message.proposalId !== undefined &&
+			(obj.proposalId = (message.proposalId || Long.UZERO).toString());
+		message.voter !== undefined && (obj.voter = message.voter);
+		if (message.options) {
+			obj.options = message.options.map((e) =>
+				e ? WeightedVoteOption.toJSON(e) : undefined
+			);
+		} else {
+			obj.options = [];
+		}
+		return obj;
+	},
+};
+
 const baseMsgVoteResponse: object = {};
 
 export const MsgVoteResponse = {
@@ -360,6 +476,58 @@ export const MsgVoteResponse = {
 	},
 
 	toJSON(_: MsgVoteResponse): unknown {
+		const obj: any = {};
+		return obj;
+	},
+};
+
+const baseMsgVoteWeightedResponse: object = {};
+
+export const MsgVoteWeightedResponse = {
+	encode(
+		_: MsgVoteWeightedResponse,
+		writer: Writer = Writer.create()
+	): Writer {
+		return writer;
+	},
+
+	decode(
+		input: Reader | Uint8Array,
+		length?: number
+	): MsgVoteWeightedResponse {
+		const reader = input instanceof Uint8Array ? new Reader(input) : input;
+		let end = length === undefined ? reader.len : reader.pos + length;
+		const message = globalThis.Object.create(
+			baseMsgVoteWeightedResponse
+		) as MsgVoteWeightedResponse;
+		while (reader.pos < end) {
+			const tag = reader.uint32();
+			switch (tag >>> 3) {
+				default:
+					reader.skipType(tag & 7);
+					break;
+			}
+		}
+		return message;
+	},
+
+	fromJSON(_: any): MsgVoteWeightedResponse {
+		const message = globalThis.Object.create(
+			baseMsgVoteWeightedResponse
+		) as MsgVoteWeightedResponse;
+		return message;
+	},
+
+	fromPartial(
+		_: DeepPartial<MsgVoteWeightedResponse>
+	): MsgVoteWeightedResponse {
+		const message = {
+			...baseMsgVoteWeightedResponse,
+		} as MsgVoteWeightedResponse;
+		return message;
+	},
+
+	toJSON(_: MsgVoteWeightedResponse): unknown {
 		const obj: any = {};
 		return obj;
 	},
@@ -514,6 +682,8 @@ export interface Msg {
 	): Promise<MsgSubmitProposalResponse>;
 	/** Vote defines a method to add a vote on a specific proposal. */
 	Vote(request: MsgVote): Promise<MsgVoteResponse>;
+	/** WeightedVote defines a method to add a weighted vote on a specific proposal. */
+	VoteWeighted(request: MsgVoteWeighted): Promise<MsgVoteWeightedResponse>;
 	/** Deposit defines a method to add deposit on a specific proposal. */
 	Deposit(request: MsgDeposit): Promise<MsgDepositResponse>;
 }
@@ -545,6 +715,18 @@ export class MsgClientImpl implements Msg {
 			data
 		);
 		return promise.then((data) => MsgVoteResponse.decode(new Reader(data)));
+	}
+
+	VoteWeighted(request: MsgVoteWeighted): Promise<MsgVoteWeightedResponse> {
+		const data = MsgVoteWeighted.encode(request).finish();
+		const promise = this.rpc.request(
+			'cosmos.gov.v1beta1.Msg',
+			'VoteWeighted',
+			data
+		);
+		return promise.then((data) =>
+			MsgVoteWeightedResponse.decode(new Reader(data))
+		);
 	}
 
 	Deposit(request: MsgDeposit): Promise<MsgDepositResponse> {

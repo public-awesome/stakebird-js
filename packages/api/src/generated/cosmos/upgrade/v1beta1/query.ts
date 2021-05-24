@@ -1,7 +1,6 @@
 /* eslint-disable */
 import { Plan } from '../../../cosmos/upgrade/v1beta1/upgrade';
 import * as Long from 'long';
-import { Any } from '../../../google/protobuf/any';
 import { Reader, Writer } from 'protobufjs/minimal';
 
 export const protobufPackage = 'cosmos.upgrade.v1beta1';
@@ -56,7 +55,7 @@ export interface QueryUpgradedConsensusStateRequest {
  * RPC method.
  */
 export interface QueryUpgradedConsensusStateResponse {
-	upgradedConsensusState?: Any;
+	upgradedConsensusState: Uint8Array;
 }
 
 const baseQueryCurrentPlanRequest: object = {};
@@ -399,11 +398,8 @@ export const QueryUpgradedConsensusStateResponse = {
 		message: QueryUpgradedConsensusStateResponse,
 		writer: Writer = Writer.create()
 	): Writer {
-		if (message.upgradedConsensusState !== undefined) {
-			Any.encode(
-				message.upgradedConsensusState,
-				writer.uint32(10).fork()
-			).ldelim();
+		if (message.upgradedConsensusState.length !== 0) {
+			writer.uint32(18).bytes(message.upgradedConsensusState);
 		}
 		return writer;
 	},
@@ -420,11 +416,8 @@ export const QueryUpgradedConsensusStateResponse = {
 		while (reader.pos < end) {
 			const tag = reader.uint32();
 			switch (tag >>> 3) {
-				case 1:
-					message.upgradedConsensusState = Any.decode(
-						reader,
-						reader.uint32()
-					);
+				case 2:
+					message.upgradedConsensusState = reader.bytes();
 					break;
 				default:
 					reader.skipType(tag & 7);
@@ -442,11 +435,9 @@ export const QueryUpgradedConsensusStateResponse = {
 			object.upgradedConsensusState !== undefined &&
 			object.upgradedConsensusState !== null
 		) {
-			message.upgradedConsensusState = Any.fromJSON(
+			message.upgradedConsensusState = bytesFromBase64(
 				object.upgradedConsensusState
 			);
-		} else {
-			message.upgradedConsensusState = undefined;
 		}
 		return message;
 	},
@@ -461,11 +452,9 @@ export const QueryUpgradedConsensusStateResponse = {
 			object.upgradedConsensusState !== undefined &&
 			object.upgradedConsensusState !== null
 		) {
-			message.upgradedConsensusState = Any.fromPartial(
-				object.upgradedConsensusState
-			);
+			message.upgradedConsensusState = object.upgradedConsensusState;
 		} else {
-			message.upgradedConsensusState = undefined;
+			message.upgradedConsensusState = new Uint8Array();
 		}
 		return message;
 	},
@@ -473,9 +462,11 @@ export const QueryUpgradedConsensusStateResponse = {
 	toJSON(message: QueryUpgradedConsensusStateResponse): unknown {
 		const obj: any = {};
 		message.upgradedConsensusState !== undefined &&
-			(obj.upgradedConsensusState = message.upgradedConsensusState
-				? Any.toJSON(message.upgradedConsensusState)
-				: undefined);
+			(obj.upgradedConsensusState = base64FromBytes(
+				message.upgradedConsensusState !== undefined
+					? message.upgradedConsensusState
+					: new Uint8Array()
+			));
 		return obj;
 	},
 };
@@ -568,6 +559,29 @@ var globalThis: any = (() => {
 	if (typeof global !== 'undefined') return global;
 	throw 'Unable to locate global object';
 })();
+
+const atob: (b64: string) => string =
+	globalThis.atob ||
+	((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'));
+function bytesFromBase64(b64: string): Uint8Array {
+	const bin = atob(b64);
+	const arr = new Uint8Array(bin.length);
+	for (let i = 0; i < bin.length; ++i) {
+		arr[i] = bin.charCodeAt(i);
+	}
+	return arr;
+}
+
+const btoa: (bin: string) => string =
+	globalThis.btoa ||
+	((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'));
+function base64FromBytes(arr: Uint8Array): string {
+	const bin: string[] = [];
+	for (let i = 0; i < arr.byteLength; ++i) {
+		bin.push(String.fromCharCode(arr[i]));
+	}
+	return btoa(bin.join(''));
+}
 
 type Builtin =
 	| Date

@@ -47,8 +47,7 @@ describe('StargazeApi', () => {
 				'surround miss nominee dream gap cross assault thank captain prosper drop duty group candy wealth weather scale put';
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
 				mnemonic,
-				undefined,
-				'stars'
+				{ prefix: 'stars' }
 			);
 			const [{ address }] = await wallet.getAccounts();
 

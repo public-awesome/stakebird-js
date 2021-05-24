@@ -14,6 +14,48 @@ import * as Long from 'long';
 
 export const protobufPackage = 'cosmos.tx.v1beta1';
 
+/** OrderBy defines the sorting order */
+export enum OrderBy {
+	/** ORDER_BY_UNSPECIFIED - ORDER_BY_UNSPECIFIED specifies an unknown sorting order. OrderBy defaults to ASC in this case. */
+	ORDER_BY_UNSPECIFIED = 0,
+	/** ORDER_BY_ASC - ORDER_BY_ASC defines ascending order */
+	ORDER_BY_ASC = 1,
+	/** ORDER_BY_DESC - ORDER_BY_DESC defines descending order */
+	ORDER_BY_DESC = 2,
+	UNRECOGNIZED = -1,
+}
+
+export function orderByFromJSON(object: any): OrderBy {
+	switch (object) {
+		case 0:
+		case 'ORDER_BY_UNSPECIFIED':
+			return OrderBy.ORDER_BY_UNSPECIFIED;
+		case 1:
+		case 'ORDER_BY_ASC':
+			return OrderBy.ORDER_BY_ASC;
+		case 2:
+		case 'ORDER_BY_DESC':
+			return OrderBy.ORDER_BY_DESC;
+		case -1:
+		case 'UNRECOGNIZED':
+		default:
+			return OrderBy.UNRECOGNIZED;
+	}
+}
+
+export function orderByToJSON(object: OrderBy): string {
+	switch (object) {
+		case OrderBy.ORDER_BY_UNSPECIFIED:
+			return 'ORDER_BY_UNSPECIFIED';
+		case OrderBy.ORDER_BY_ASC:
+			return 'ORDER_BY_ASC';
+		case OrderBy.ORDER_BY_DESC:
+			return 'ORDER_BY_DESC';
+		default:
+			return 'UNKNOWN';
+	}
+}
+
 /** BroadcastMode specifies the broadcast mode for the TxService.Broadcast RPC method. */
 export enum BroadcastMode {
 	/** BROADCAST_MODE_UNSPECIFIED - zero-value for mode ordering */
@@ -81,6 +123,7 @@ export interface GetTxsEventRequest {
 	events: string[];
 	/** pagination defines an pagination for the request. */
 	pagination?: PageRequest;
+	orderBy: OrderBy;
 }
 
 /**
@@ -120,8 +163,15 @@ export interface BroadcastTxResponse {
  * RPC method.
  */
 export interface SimulateRequest {
-	/** tx is the transaction to simulate. */
+	/**
+	 * tx is the transaction to simulate.
+	 * Deprecated. Send raw tx bytes instead.
+	 *
+	 * @deprecated
+	 */
 	tx?: Tx;
+	/** tx_bytes is the raw transaction. */
+	txBytes: Uint8Array;
 }
 
 /**
@@ -152,7 +202,7 @@ export interface GetTxResponse {
 	txResponse?: TxResponse;
 }
 
-const baseGetTxsEventRequest: object = { events: '' };
+const baseGetTxsEventRequest: object = { events: '', orderBy: 0 };
 
 export const GetTxsEventRequest = {
 	encode(
@@ -167,6 +217,9 @@ export const GetTxsEventRequest = {
 				message.pagination,
 				writer.uint32(18).fork()
 			).ldelim();
+		}
+		if (message.orderBy !== 0) {
+			writer.uint32(24).int32(message.orderBy);
 		}
 		return writer;
 	},
@@ -189,6 +242,9 @@ export const GetTxsEventRequest = {
 						reader,
 						reader.uint32()
 					);
+					break;
+				case 3:
+					message.orderBy = reader.int32() as any;
 					break;
 				default:
 					reader.skipType(tag & 7);
@@ -213,6 +269,11 @@ export const GetTxsEventRequest = {
 		} else {
 			message.pagination = undefined;
 		}
+		if (object.orderBy !== undefined && object.orderBy !== null) {
+			message.orderBy = orderByFromJSON(object.orderBy);
+		} else {
+			message.orderBy = 0;
+		}
 		return message;
 	},
 
@@ -229,6 +290,11 @@ export const GetTxsEventRequest = {
 		} else {
 			message.pagination = undefined;
 		}
+		if (object.orderBy !== undefined && object.orderBy !== null) {
+			message.orderBy = object.orderBy;
+		} else {
+			message.orderBy = 0;
+		}
 		return message;
 	},
 
@@ -243,6 +309,8 @@ export const GetTxsEventRequest = {
 			(obj.pagination = message.pagination
 				? PageRequest.toJSON(message.pagination)
 				: undefined);
+		message.orderBy !== undefined &&
+			(obj.orderBy = orderByToJSON(message.orderBy));
 		return obj;
 	},
 };
@@ -531,6 +599,9 @@ export const SimulateRequest = {
 		if (message.tx !== undefined) {
 			Tx.encode(message.tx, writer.uint32(10).fork()).ldelim();
 		}
+		if (message.txBytes.length !== 0) {
+			writer.uint32(18).bytes(message.txBytes);
+		}
 		return writer;
 	},
 
@@ -545,6 +616,9 @@ export const SimulateRequest = {
 			switch (tag >>> 3) {
 				case 1:
 					message.tx = Tx.decode(reader, reader.uint32());
+					break;
+				case 2:
+					message.txBytes = reader.bytes();
 					break;
 				default:
 					reader.skipType(tag & 7);
@@ -563,6 +637,9 @@ export const SimulateRequest = {
 		} else {
 			message.tx = undefined;
 		}
+		if (object.txBytes !== undefined && object.txBytes !== null) {
+			message.txBytes = bytesFromBase64(object.txBytes);
+		}
 		return message;
 	},
 
@@ -573,6 +650,11 @@ export const SimulateRequest = {
 		} else {
 			message.tx = undefined;
 		}
+		if (object.txBytes !== undefined && object.txBytes !== null) {
+			message.txBytes = object.txBytes;
+		} else {
+			message.txBytes = new Uint8Array();
+		}
 		return message;
 	},
 
@@ -580,6 +662,12 @@ export const SimulateRequest = {
 		const obj: any = {};
 		message.tx !== undefined &&
 			(obj.tx = message.tx ? Tx.toJSON(message.tx) : undefined);
+		message.txBytes !== undefined &&
+			(obj.txBytes = base64FromBytes(
+				message.txBytes !== undefined
+					? message.txBytes
+					: new Uint8Array()
+			));
 		return obj;
 	},
 };
