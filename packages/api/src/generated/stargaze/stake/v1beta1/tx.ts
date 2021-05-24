@@ -10,6 +10,8 @@ export interface MsgUnstakeResponse {}
 
 export interface MsgBuyCreatorCoinResponse {}
 
+export interface MsgSellCreatorCoinResponse {}
+
 export interface MsgStake {
 	vendorId: number;
 	postId: string;
@@ -29,6 +31,14 @@ export interface MsgBuyCreatorCoin {
 	username: string;
 	creator: string;
 	buyer: string;
+	validator: string;
+	amount: string;
+}
+
+export interface MsgSellCreatorCoin {
+	username: string;
+	creator: string;
+	seller: string;
 	validator: string;
 	amount: string;
 }
@@ -164,6 +174,58 @@ export const MsgBuyCreatorCoinResponse = {
 	},
 
 	toJSON(_: MsgBuyCreatorCoinResponse): unknown {
+		const obj: any = {};
+		return obj;
+	},
+};
+
+const baseMsgSellCreatorCoinResponse: object = {};
+
+export const MsgSellCreatorCoinResponse = {
+	encode(
+		_: MsgSellCreatorCoinResponse,
+		writer: Writer = Writer.create()
+	): Writer {
+		return writer;
+	},
+
+	decode(
+		input: Reader | Uint8Array,
+		length?: number
+	): MsgSellCreatorCoinResponse {
+		const reader = input instanceof Uint8Array ? new Reader(input) : input;
+		let end = length === undefined ? reader.len : reader.pos + length;
+		const message = globalThis.Object.create(
+			baseMsgSellCreatorCoinResponse
+		) as MsgSellCreatorCoinResponse;
+		while (reader.pos < end) {
+			const tag = reader.uint32();
+			switch (tag >>> 3) {
+				default:
+					reader.skipType(tag & 7);
+					break;
+			}
+		}
+		return message;
+	},
+
+	fromJSON(_: any): MsgSellCreatorCoinResponse {
+		const message = globalThis.Object.create(
+			baseMsgSellCreatorCoinResponse
+		) as MsgSellCreatorCoinResponse;
+		return message;
+	},
+
+	fromPartial(
+		_: DeepPartial<MsgSellCreatorCoinResponse>
+	): MsgSellCreatorCoinResponse {
+		const message = {
+			...baseMsgSellCreatorCoinResponse,
+		} as MsgSellCreatorCoinResponse;
+		return message;
+	},
+
+	toJSON(_: MsgSellCreatorCoinResponse): unknown {
 		const obj: any = {};
 		return obj;
 	},
@@ -545,6 +607,142 @@ export const MsgBuyCreatorCoin = {
 	},
 };
 
+const baseMsgSellCreatorCoin: object = {
+	username: '',
+	creator: '',
+	seller: '',
+	validator: '',
+	amount: '',
+};
+
+export const MsgSellCreatorCoin = {
+	encode(
+		message: MsgSellCreatorCoin,
+		writer: Writer = Writer.create()
+	): Writer {
+		if (message.username !== '') {
+			writer.uint32(10).string(message.username);
+		}
+		if (message.creator !== '') {
+			writer.uint32(18).string(message.creator);
+		}
+		if (message.seller !== '') {
+			writer.uint32(26).string(message.seller);
+		}
+		if (message.validator !== '') {
+			writer.uint32(34).string(message.validator);
+		}
+		if (message.amount !== '') {
+			writer.uint32(42).string(message.amount);
+		}
+		return writer;
+	},
+
+	decode(input: Reader | Uint8Array, length?: number): MsgSellCreatorCoin {
+		const reader = input instanceof Uint8Array ? new Reader(input) : input;
+		let end = length === undefined ? reader.len : reader.pos + length;
+		const message = globalThis.Object.create(
+			baseMsgSellCreatorCoin
+		) as MsgSellCreatorCoin;
+		while (reader.pos < end) {
+			const tag = reader.uint32();
+			switch (tag >>> 3) {
+				case 1:
+					message.username = reader.string();
+					break;
+				case 2:
+					message.creator = reader.string();
+					break;
+				case 3:
+					message.seller = reader.string();
+					break;
+				case 4:
+					message.validator = reader.string();
+					break;
+				case 5:
+					message.amount = reader.string();
+					break;
+				default:
+					reader.skipType(tag & 7);
+					break;
+			}
+		}
+		return message;
+	},
+
+	fromJSON(object: any): MsgSellCreatorCoin {
+		const message = globalThis.Object.create(
+			baseMsgSellCreatorCoin
+		) as MsgSellCreatorCoin;
+		if (object.username !== undefined && object.username !== null) {
+			message.username = String(object.username);
+		} else {
+			message.username = '';
+		}
+		if (object.creator !== undefined && object.creator !== null) {
+			message.creator = String(object.creator);
+		} else {
+			message.creator = '';
+		}
+		if (object.seller !== undefined && object.seller !== null) {
+			message.seller = String(object.seller);
+		} else {
+			message.seller = '';
+		}
+		if (object.validator !== undefined && object.validator !== null) {
+			message.validator = String(object.validator);
+		} else {
+			message.validator = '';
+		}
+		if (object.amount !== undefined && object.amount !== null) {
+			message.amount = String(object.amount);
+		} else {
+			message.amount = '';
+		}
+		return message;
+	},
+
+	fromPartial(object: DeepPartial<MsgSellCreatorCoin>): MsgSellCreatorCoin {
+		const message = { ...baseMsgSellCreatorCoin } as MsgSellCreatorCoin;
+		if (object.username !== undefined && object.username !== null) {
+			message.username = object.username;
+		} else {
+			message.username = '';
+		}
+		if (object.creator !== undefined && object.creator !== null) {
+			message.creator = object.creator;
+		} else {
+			message.creator = '';
+		}
+		if (object.seller !== undefined && object.seller !== null) {
+			message.seller = object.seller;
+		} else {
+			message.seller = '';
+		}
+		if (object.validator !== undefined && object.validator !== null) {
+			message.validator = object.validator;
+		} else {
+			message.validator = '';
+		}
+		if (object.amount !== undefined && object.amount !== null) {
+			message.amount = object.amount;
+		} else {
+			message.amount = '';
+		}
+		return message;
+	},
+
+	toJSON(message: MsgSellCreatorCoin): unknown {
+		const obj: any = {};
+		message.username !== undefined && (obj.username = message.username);
+		message.creator !== undefined && (obj.creator = message.creator);
+		message.seller !== undefined && (obj.seller = message.seller);
+		message.validator !== undefined && (obj.validator = message.validator);
+		message.amount !== undefined && (obj.amount = message.amount);
+		return obj;
+	},
+};
+
 /** Msg defines the stake Msg service. */
 export interface Msg {
 	Stake(request: MsgStake): Promise<MsgStakeResponse>;
@@ -552,6 +750,9 @@ export interface Msg {
 	BuyCreatorCoin(
 		request: MsgBuyCreatorCoin
 	): Promise<MsgBuyCreatorCoinResponse>;
+	SellCreatorCoin(
+		request: MsgSellCreatorCoin
+	): Promise<MsgSellCreatorCoinResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -594,6 +795,20 @@ export class MsgClientImpl implements Msg {
 		);
 		return promise.then((data) =>
 			MsgBuyCreatorCoinResponse.decode(new Reader(data))
+		);
+	}
+
+	SellCreatorCoin(
+		request: MsgSellCreatorCoin
+	): Promise<MsgSellCreatorCoinResponse> {
+		const data = MsgSellCreatorCoin.encode(request).finish();
+		const promise = this.rpc.request(
+			'stargaze.stake.v1beta1.Msg',
+			'SellCreatorCoin',
+			data
+		);
+		return promise.then((data) =>
+			MsgSellCreatorCoinResponse.decode(new Reader(data))
 		);
 	}
 }
