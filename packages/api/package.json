@@ -20,5 +20,8 @@
 		"@cosmjs/stargate": "^0.25.3",
 		"@cosmjs/utils": "^0.25.3",
 		"ts-proto": "^1.41.1"
+	},
+	"dependencies": {
+		"@cosmjs/cosmwasm-stargate": "^0.25.5"
 	}
 }
