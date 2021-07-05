@@ -12,15 +12,6 @@ import { MsgPost } from './generated/stargaze/curating/v1beta1/tx';
 let api: StargazeApi;
 const chainUrl = 'localhost:26657';
 
-/***
-
-NOTE: The first time running these test will fail without funding the test user. 
-
-Fund with:
-./bin/starsd tx bank send validator [address] 100000000ustarx --keyring-backend test --chain-id localnet-1
-
-*/
-
 describe('StargazeApi', () => {
 	beforeAll(async () => {
 		api = await StargazeApi.connect({
@@ -35,17 +26,17 @@ describe('StargazeApi', () => {
 		it('should fetch balances using tendermint client', async () => {
 			const impl = new QueryClientImpl(api.connection.queryConnection);
 			const res = await impl.AllBalances({
-				address: 'stars1wsrvdmgfs0gugen4t4ak7hnudhy9mgnpcys5gn', // Shane's account
+				address: 'stars13nh557xzyfdm6csyp0xslu939l753sdlgdc2q0',
 			});
 
-			expect(res.balances).toHaveLength(4);
+			expect(res.balances).toHaveLength(3);
 		});
 	});
 
 	describe('Txs', () => {
 		it('should post a tx on chain', async () => {
 			const mnemonic =
-				'surround miss nominee dream gap cross assault thank captain prosper drop duty group candy wealth weather scale put';
+				'jacket powder menu denial capital setup result vintage melody mouse innocent start elephant umbrella second monkey saddle matter avoid frost sentence mask matrix anxiety';
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
 				mnemonic,
 				{ prefix: 'stars' }

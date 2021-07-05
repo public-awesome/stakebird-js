@@ -23,6 +23,7 @@
 		"ts-proto": "^1.41.1"
 	},
 	"dependencies": {
-		"@cosmjs/cosmwasm-stargate": "^0.25.5"
+		"@cosmjs/cosmwasm-stargate": "^0.25.5",
+		"ts-jest": "^27.0.3"
 	}
 }
