@@ -1,12 +1,13 @@
-import { StargazeApi } from './api';
-import { QueryClientImpl } from './generated/cosmos/bank/v1beta1/query';
+import { coins } from '@cosmjs/launchpad';
 import { DirectSecp256k1HdWallet, Registry } from '@cosmjs/proto-signing';
 import {
-	SigningStargateClient,
 	assertIsBroadcastTxSuccess,
+	SigningStargateClient,
 } from '@cosmjs/stargate';
+
+import { StargazeApi } from './api';
+import { QueryClientImpl } from './generated/cosmos/bank/v1beta1/query';
 import { MsgPost } from './generated/stargaze/curating/v1beta1/tx';
-import { coins } from '@cosmjs/launchpad';
 
 let api: StargazeApi;
 const chainUrl = 'localhost:26657';
