@@ -1,3 +1,5 @@
+import { calculateFee, GasPrice } from '@cosmjs/stargate';
+
 export const alice = {
 	mnemonic:
 		'enlist hip relief stomach skate base shallow young switch frequent cry park',
@@ -21,3 +23,6 @@ export const wasmd = {
 		address: 'wasmvaloper1m4vhsgne6u74ff78vf0tvkjq3q4hjf9vjfrmy2',
 	},
 };
+
+export const defaultGasPrice = GasPrice.fromString('0.025ustarx');
+export const defaultExecuteFee = calculateFee(200_000, defaultGasPrice);

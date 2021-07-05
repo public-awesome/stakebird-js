@@ -1,13 +1,7 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 
-import {
-	alice,
-	defaultUploadFee,
-	getHackatom,
-	wasmd,
-} from './testutils.spec';
-
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { alice, defaultExecuteFee, wasmd } from './testutils.spec';
 
 describe('CW20BondingClient', () => {
 	describe('buy', () => {
@@ -22,11 +16,13 @@ describe('CW20BondingClient', () => {
 				wallet,
 				options
 			);
-			// const { codeId } = await client.upload(
-			// 	alice.address0,
-			// 	getHackatom().data,
-			// 	defaultUploadFee
-			// );
+			const contractAddress = 'adsf';
+			const result = await client.execute(
+				alice.address0,
+				contractAddress,
+				{ buy: {} },
+				defaultExecuteFee
+			);
 		});
 	});
 });

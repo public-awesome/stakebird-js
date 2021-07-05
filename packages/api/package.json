@@ -15,15 +15,13 @@
 		"test": "jest --testTimeout 10000"
 	},
 	"devDependencies": {
-		"@cosmjs/launchpad": "^0.25.3",
-		"@cosmjs/proto-signing": "^0.25.3",
-		"@cosmjs/stargate": "^0.25.3",
-		"@cosmjs/utils": "^0.25.3",
+		"@cosmjs/cosmwasm-stargate": "^0.25.5",
+		"@cosmjs/launchpad": "^0.25.5",
+		"@cosmjs/proto-signing": "^0.25.5",
+		"@cosmjs/stargate": "^0.25.5",
+		"@cosmjs/utils": "^0.25.5",
 		"jest": "^27.0.6",
 		"ts-proto": "^1.41.1"
 	},
-	"dependencies": {
-		"@cosmjs/cosmwasm-stargate": "^0.25.5",
-		"ts-jest": "^27.0.3"
-	}
+	"dependencies": {}
 }
