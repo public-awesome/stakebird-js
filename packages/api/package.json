@@ -19,6 +19,7 @@
 		"@cosmjs/proto-signing": "^0.25.3",
 		"@cosmjs/stargate": "^0.25.3",
 		"@cosmjs/utils": "^0.25.3",
+		"jest": "^27.0.6",
 		"ts-proto": "^1.41.1"
 	},
 	"dependencies": {
